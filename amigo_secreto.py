@@ -2,7 +2,7 @@ from datetime import datetime
 import json
 import logging
 import random
-from typing import Any, Dict, Optional, NoReturn, List
+from typing import Any, Dict, Optional, List
 
 
 ANO = datetime.now().year
@@ -16,17 +16,17 @@ Então, caso haja algum problema, ou seu nome não esteja correto, contate a gen
 
 
 class Pessoa:
-    def __init__(self, nome: str, email: str):
+    def __init__(self, nome: str, email: str) -> None:
         self.nome = nome
         self.email = email
         self.tirou = None
 
-    def __repr__(self):
+    def __repr__(self) -> None:
         return str(self.__dict__)
 
 
 class Bilhete:
-    def __init__(self, nome_escrito: str):
+    def __init__(self, nome_escrito: str) -> None:
         self.nome_escrito = nome_escrito
 
 
@@ -39,8 +39,9 @@ def email_connect(keys_from: Dict[str, str]) -> Any:
     """
 
     import smtplib
+
     logging.info("Starting Gmail connection")
-    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+    server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
 
     server.ehlo()
     server.login(keys_from["email"], keys_from["password"])
@@ -48,10 +49,8 @@ def email_connect(keys_from: Dict[str, str]) -> Any:
 
 
 def send_list_to_email(
-    lista: List[Any],
-    keys_from: Dict[str, str],
-    content_fmt: Optional[str] = "*"
-) -> NoReturn:
+    lista: List[Any], keys_from: Dict[str, str], content_fmt: Optional[str] = "*"
+) -> None:
 
     from time import sleep
     from email.message import EmailMessage
@@ -85,16 +84,13 @@ def send_list_to_email(
     logging.info("Todos os emails foram enviados!!")
 
 
-def main():
+def main() -> None:
     logging.basicConfig(
-            level=logging.INFO,
-            format="%(asctime)s||%(levelname)s||%(message)s"
+        level=logging.INFO, format="%(asctime)s||%(levelname)s||%(message)s"
     )
 
     with open("participantes.txt", "r") as file:
-        participantes = [
-                linha.strip().split("\t") for linha in file.readlines()
-                ]
+        participantes = [linha.strip().split("\t") for linha in file.readlines()]
 
     with open("email.json", "r") as file:
         keys_email = json.load(file)
